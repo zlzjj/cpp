@@ -1,0 +1,68 @@
+wsl 安装 Ubuntu或者虚拟机安装Ubuntu
+
+
+
+//更新apt
+sudo apt update
+sudo apt upgrade -y
+
+//工具
+sudo apt install -y \
+  build-essential \
+  cmake \
+  git \
+  pkg-config \
+  unzip \
+  wget
+
+//依赖
+sudo apt install -y \
+  libgl1-mesa-dev \
+  libglfw3-dev \
+  libglew-dev \
+  libxinerama-dev \
+  libxcursor-dev \
+  libxrandr-dev \
+  libxi-dev \
+  libeigen3-dev \
+  libopenblas-dev \
+  mesa-utils
+
+apt install -y freeglut3-dev
+//验证
+glxinfo | grep "OpenGL"
+
+//下载编译 MuJoCo MPC
+mkdir -p ~/mujoco_projects
+cd ~/mujoco_projects
+git clone https://github.com/google-deepmind/mujoco_mpc.git
+cd mujoco_mpc
+
+//编译
+cmake --build . -j$(nproc)
+
+
+//调试运行
+cd build
+cmake --build . -j$(nproc)                                              （nproc)为使用全部核心的意思
+export LIBGL_ALWAYS_SOFTWARE=1
+./bin/mjpc --task=SimpleCar
+
+
+JPC_RENDER=0 ./bin/mjpc --task=SimpleCar
+
+
+cd cpp/build
+cmake ..
+make -j$(nproc)
+./bin/mjpc --task=SimpleCar
+JPC_RENDER=0 ./bin/mjpc --task=SimpleCar
+
+
+
+
+
+
+
+
+
